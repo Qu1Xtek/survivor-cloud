@@ -1,0 +1,44 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <Configurations>Debug;Release</Configurations>
+        <!-- Suppress nullable reference warnings -->
+        <NoWarn>$(NoWarn);CS8600;CS8601;CS8602;CS8603;CS8604;CS8605;CS8609;CS8610;CS8611;CS8612;CS8613;CS8614;CS8615;CS8616;CS8617;CS8618;CS8619;CS8620;CS8621;CS8622;CS8625;CS8629;CS8631;CS8632;CS8633;CS8634;CS8635;CS8636;CS8637;CS8638;CS8639;CS8640;CS8641;CS8642;CS8643;CS8644;CS8645;CS8646;CS8647;CS8648;CS8649;CS8650;CS8651;CS8652;CS8653;CS8654;CS8655;CS8656;CS8657;CS8658;CS8659;CS8660;CS8661;CS8662;CS8663;CS8664;CS8665;CS8666;CS8667;CS8668;CS8669;CS8670</NoWarn>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+            <_Parameter1>CloudTests</_Parameter1>
+        </AssemblyAttribute>
+        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+            <_Parameter1>DynamicProxyGenAssembly2</_Parameter1>
+        </AssemblyAttribute>
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Com.Unity.Services.CloudCode.Apis" Version="0.0.21" />
+      <PackageReference Include="Com.Unity.Services.CloudCode.Core" Version="0.0.1" />
+      <PackageReference Include="Google.Cloud.Firestore" Version="3.10.0" />
+      <PackageReference Include="Google.Cloud.Firestore.V1" Version="3.10.0" />
+      <PackageReference Include="Grpc.Auth" Version="2.71.0" />
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+      <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.0" />
+      <PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" Version="8.12.1" />
+      <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.12.1" />
+      <PackageReference Include="RestSharp" Version="112.1.0" />
+      <PackageReference Include="StackExchange.Redis" Version="2.8.37" />
+      <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.12.1" />
+      <PackageReference Include="System.Net.Http.Json" Version="7.0.1" />
+    </ItemGroup>
+
+    <PropertyGroup>
+        <PublishReadyToRunComposite>true</PublishReadyToRunComposite>
+    </PropertyGroup>
+
+<!--    <Target Name="Zip" AfterTargets="Publish">-->
+<!--        <Message Importance="high" Text="Zipping output!!"/>-->
+<!--        <Exec Command="zip -r $(SolutionDir)ExampleModule.ccm $(PublishDir)" />-->
+<!--    </Target>-->
+</Project>
