@@ -1,4 +1,5 @@
 using CloudLogic.RepoModels.Duel;
+using CloudLogic.RepoModels.Items;
 using System.Collections.Generic;
 
 namespace CloudLogic.Response.DTO
@@ -40,6 +41,7 @@ namespace CloudLogic.Response.DTO
         public DuelSpellDTO Weapon { get; set; }
         public List<DuelSpellDTO> Book { get; set; }
         public int Stance { get; set; }
+        public Item Dagger { get; set; }
     }
 
     public class DuelSpellDTO

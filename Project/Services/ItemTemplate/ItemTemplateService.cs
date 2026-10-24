@@ -57,6 +57,16 @@ namespace CloudLogic.Services.ItemTemplate
         }
 
 
+        public async Task<ItemTemplateModel> GetDaggerTemplate()
+        {
+            return (await GetItemTemplates()).FirstOrDefault(x => x.Type == ItemType.DuelWeapon);
+        }
+
+        private async Task<List<ItemTemplateModel>> GearTemplates()
+        {
+            return (await GetItemTemplates()).Where(x => x.Type != ItemType.DuelWeapon).ToList();
+        }
+
         public async Task<ItemTemplateModel> GetItemTemplateById(string id)
         {
             var templates = await GetItemTemplates();
@@ -130,7 +140,7 @@ namespace CloudLogic.Services.ItemTemplate
         // requested level if no template of that rarity exists at all.
         public async Task<int> GetClosestLevelForRarityForDailyLogin(int requestedLevel, RarityType rarity)
         {
-            var templates = await GetItemTemplates();
+            var templates = await GearTemplates();
 
             var levels = templates
                 .Where(t => (t.Rarity == rarity ||
@@ -155,7 +165,7 @@ namespace CloudLogic.Services.ItemTemplate
 
         public async Task<List<ItemTemplateModel>> GetTemplatesForSpecific(RarityType rarity, int level, bool exclusiveRarity)
         {
-            var templates = await GetItemTemplates();
+            var templates = await GearTemplates();
 
             return templates.Where(x => x.Level <= level && x.Level >= level - 5).ToList();
         }
@@ -166,7 +176,7 @@ namespace CloudLogic.Services.ItemTemplate
             int levelMax,
             bool exclusiveRarity)
         {
-            var templates = await GetItemTemplates();
+            var templates = await GearTemplates();
 
             if (templates.Count == 0)
             {
@@ -189,7 +199,7 @@ namespace CloudLogic.Services.ItemTemplate
 
         public async Task<List<ItemTemplateModel>> GetItemTemplatesBy(int? level = null, RarityType? rarity = null, ItemType? itemType = null)
         {
-            var templates = await GetItemTemplates();
+            var templates = await GearTemplates();
 
             var filtered = templates.Where(t =>
                 (!level.HasValue || t.Level == level.Value) &&
@@ -209,7 +219,7 @@ namespace CloudLogic.Services.ItemTemplate
             int requestedLevel,
             RarityType desiredRarity)
         {
-            var templates = await GetItemTemplates();
+            var templates = await GearTemplates();
 
             if (templates == null || templates.Count == 0)
             {

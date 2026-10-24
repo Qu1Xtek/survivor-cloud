@@ -52,6 +52,11 @@ namespace CloudLogic.Services.Items
                 return new ReforgeItemResponse() { Success = false };
             }
 
+            if (template.Type == ItemType.DuelWeapon)
+            {
+                template = DuelDagger.At(template, item.Level, item.Rarity);
+            }
+
             var reforgedItem = ItemStatGenerator.GetReforgedItem(item, template, statNum);
 
             var enoughResources = await _playerManagerService.TakeCraftingMaterialsAndGold(ctx.PlayerId, goldCost, craftingMatCost);

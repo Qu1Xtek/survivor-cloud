@@ -105,7 +105,7 @@ namespace CloudLogic.Services
         {
             var score = 0;
 
-            foreach (var item in items)
+            foreach (var item in items.Where(i => i.Type != ItemType.DuelWeapon))
             {
                 float levelScore = item.Level * 10;
                 // Base + rarity bonus:

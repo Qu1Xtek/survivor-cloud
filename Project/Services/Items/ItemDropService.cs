@@ -15,12 +15,14 @@ namespace CloudLogic.Services.Items
         private ItemDropRepo _repo;
         private IItemTemplateService _templateService;
         private IPlayerManagerService _playerManagerService;
+        private VersionSettingRepo _versions;
 
-        public ItemDropService(ItemDropRepo repo, IItemTemplateService templateService, IPlayerManagerService playerManagerService)
+        public ItemDropService(ItemDropRepo repo, IItemTemplateService templateService, IPlayerManagerService playerManagerService, VersionSettingRepo versions)
         {
             _repo = repo;
             _templateService = templateService;
-            _playerManagerService = playerManagerService;          
+            _playerManagerService = playerManagerService;
+            _versions = versions;
         }
 
         public async Task PrepareNewRunDropBag(string playerId)
@@ -33,9 +35,10 @@ namespace CloudLogic.Services.Items
             });
         }
 
-        public async Task<DroppedItem> DropItem(string playerId, bool isBoss = false)
+        public async Task<DroppedItem> DropItem(string playerId, bool isBoss = false, int clientVersion = 0)
         {
             DroppedItem dropResult = null;
+            int daggerChance = await DaggerChance(clientVersion);
             await _repo.RunOurTransactionAsync(async tran =>
             {
                 var playerData = await _playerManagerService.GetPlayerDataAsync(playerId, null, tran);
@@ -94,7 +97,11 @@ namespace CloudLogic.Services.Items
 
                 rarity = rarity > maxRarityPossible ? maxRarityPossible : rarity;
 
-                var itemTMPL = await _templateService.GetItemTemplate(rarity, windowBottom, selectedLevel, false);
+                var daggerTiers = rarity <= DuelDagger.MaxRarity ? DuelDagger.Droppable(playerData.HighestDagger, selectedLevel) : new List<int>();
+                var templates = await _templateService.GetGenerationTemplates(rarity, windowBottom, selectedLevel, false);
+                var dagger = daggerTiers.Count > 0 && new Random().Next(0, 100) < daggerChance ? await _templateService.GetDaggerTemplate() : null;
+
+                var itemTMPL = dagger ?? templates[new Random().Next(0, templates.Count)];
 
                 await _playerManagerService.IncreaseItemDropCountForData(playerData, tran);
 
@@ -104,7 +111,8 @@ namespace CloudLogic.Services.Items
                     DroppedAt = Timestamp.FromDateTime(DateTime.UtcNow),
                     ItemTemplateId = itemTMPL.Id,
                     DropType = DropType.Item,
-                    PlayerId = playerId
+                    PlayerId = playerId,
+                    Level = dagger != null ? DaggerLevel(daggerTiers, windowBottom) : 0
                 };
 
                 await _repo.AddItemDrop(playerId, droppedItem, tran);
@@ -114,6 +122,23 @@ namespace CloudLogic.Services.Items
             });
 
             return dropResult;
+        }
+
+        private async Task<int> DaggerChance(int clientVersion)
+        {
+            if (clientVersion <= 0)
+            {
+                return 0;
+            }
+
+            var setting = await _versions.GetVersionSetting();
+            return setting.DaggerMinVersion > 0 && clientVersion >= setting.DaggerMinVersion ? setting.DaggerDropChance : 0;
+        }
+
+        private static int DaggerLevel(List<int> tiers, int windowBottom)
+        {
+            var inWindow = tiers.Where(t => t >= windowBottom).ToList();
+            return inWindow.Count > 0 ? inWindow[new Random().Next(0, inWindow.Count)] : tiers[tiers.Count - 1];
         }
 
         private async Task<DroppedItem> GetRerollRuneDrop(string playerId = "", Transaction tran = null)

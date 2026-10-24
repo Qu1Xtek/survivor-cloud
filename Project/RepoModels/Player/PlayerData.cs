@@ -105,6 +105,9 @@ namespace CloudLogic.RepoModels.Player
         public List<string> DefeatedDuelers { get; set; }
 
         [FirestoreProperty]
+        public int HighestDagger { get; set; }
+
+        [FirestoreProperty]
         public Timestamp LastShopBuyAt { get; set; }
 
         [FirestoreProperty]

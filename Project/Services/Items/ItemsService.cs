@@ -72,7 +72,7 @@ namespace CloudLogic.Services.Items
                     return null;
                 }
 
-                item = await _itemGenerationService.CreateItemFromTemplate(itemDrop.ItemTemplateId, itemDrop.Rarity);
+                item = await _itemGenerationService.CreateItemFromTemplate(itemDrop.ItemTemplateId, itemDrop.Rarity, itemDrop.Level);
 
                 item.OwnerId = playerId;
                 item = await CreateItem(item);

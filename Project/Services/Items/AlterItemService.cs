@@ -33,7 +33,7 @@ namespace CloudLogic.Services.Items
             Item item = await _itemsRepository.GetPlayerItem(ctx.PlayerId, itemId);
 
             // If you try to alter different stats than already altered
-            if (item.AlteredTimes > 0 && !item.Stats[statNum].Altered) 
+            if (item.Type == ItemType.DuelWeapon || (item.AlteredTimes > 0 && !item.Stats[statNum].Altered))
             {
                 return new AlterItemResponse() { Success = false };
             }

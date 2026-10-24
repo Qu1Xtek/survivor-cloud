@@ -164,7 +164,7 @@ namespace CloudLogic.RepoModels.Items
             };
 
 
-            if (itemTemplate.Type != ItemType.Weapon)
+            if (!IsWeapon(itemTemplate.Type))
             {
                 item.Armor = GetStatFromRange(itemTemplate.ArmorRange);
 
@@ -294,7 +294,7 @@ namespace CloudLogic.RepoModels.Items
                     { StatEnum.CritPower.ToString(), itemTemplate.CritPowerRange},
                 };
 
-            if (itemTemplate.Type == ItemType.Weapon)
+            if (IsWeapon(itemTemplate.Type))
             {
                 itemStats.Add(StatEnum.CriticalChance.ToString(), itemTemplate.CriticalChanceRange);
             }
@@ -378,6 +378,11 @@ namespace CloudLogic.RepoModels.Items
             }
 
             return null;
+        }
+
+        private static bool IsWeapon(ItemType type)
+        {
+            return type == ItemType.Weapon || type == ItemType.DuelWeapon;
         }
 
         private static List<int> GetRangeByStatName(string statName, ItemTemplate itemTemplate)

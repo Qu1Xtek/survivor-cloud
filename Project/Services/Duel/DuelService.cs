@@ -1,4 +1,5 @@
 using CloudLogic.RepoModels.Duel;
+using CloudLogic.RepoModels.Items;
 using CloudLogic.RepoModels.Player;
 using CloudLogic.Repositories;
 using CloudLogic.Response.DTO;
@@ -39,8 +40,11 @@ namespace CloudLogic.Services.Duel
 
         public async Task<DuelLoadoutDTO> GetLoadout(string playerId)
         {
-            var me = await BuildPlayer(playerId);
-            return DuelMapper.ToLoadout(me, true);
+            var player = await _players.GetPlayerDataByPlayerId(playerId);
+            var equipped = (await _gear.GetEquipedItems()).Values.Where(i => i != null).ToList();
+            var loadout = DuelMapper.ToLoadout(PlayerDuelerBuilder.Build(player.PlayerId ?? "You", player, equipped), true);
+            loadout.Dagger = equipped.FirstOrDefault(i => i.Type == ItemType.DuelWeapon);
+            return loadout;
         }
 
         public async Task<DuelLoadoutDTO> SetLoadout(string playerId, List<int> spells)
@@ -82,12 +86,6 @@ namespace CloudLogic.Services.Duel
             }
 
             return result;
-        }
-
-        private async Task<Dueler> BuildPlayer(string playerId)
-        {
-            var player = await _players.GetPlayerDataByPlayerId(playerId);
-            return PlayerDuelerBuilder.Build(player.PlayerId ?? "You", player, (await _gear.GetEquipedItems()).Values);
         }
 
         private async Task GrantFirstWin(PlayerData player, Dueler npc, DuelResultDTO result)

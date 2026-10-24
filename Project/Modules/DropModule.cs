@@ -80,13 +80,13 @@ namespace CloudLogic.Modules
         }
 
         [CloudCodeFunction(nameof(CreateItemDrop))]
-        public async Task<ItemDropDTO> CreateItemDrop(IExecutionContext ctx)
+        public async Task<ItemDropDTO> CreateItemDrop(IExecutionContext ctx, int clientVersion = 0)
         {
             return await CloudDi.WithScope(_logger, ctx, async sp =>
             {
                 var droppedItem = await sp
                 .GetRequiredService<ItemDropService>()
-                .DropItem(ctx.PlayerId);
+                .DropItem(ctx.PlayerId, false, clientVersion);
 
                 return new ItemDropDTO
                 {
@@ -99,12 +99,12 @@ namespace CloudLogic.Modules
         }
 
         [CloudCodeFunction(nameof(CreateBossDrop))]
-        public async Task<ItemDropDTO> CreateBossDrop(IExecutionContext ctx)
+        public async Task<ItemDropDTO> CreateBossDrop(IExecutionContext ctx, int clientVersion = 0)
         {
             return await CloudDi.WithScope(_logger, ctx, async sp =>
             {
                 var droppedItem = await sp.GetRequiredService<ItemDropService>()
-                    .DropItem(ctx.PlayerId, true);
+                    .DropItem(ctx.PlayerId, true, clientVersion);
 
                 // PlayerId is already set in CreateItemDrop
                 return new ItemDropDTO

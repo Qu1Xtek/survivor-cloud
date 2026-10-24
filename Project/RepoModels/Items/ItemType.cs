@@ -19,6 +19,7 @@ namespace CloudLogic.RepoModels.Items
         Chest = 8,
         Legs = 9,
         Amulet = 10,
-        Reagent = 11
+        Reagent = 11,
+        DuelWeapon = 12
     }
 }

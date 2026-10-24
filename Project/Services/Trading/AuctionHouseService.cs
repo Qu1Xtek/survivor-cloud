@@ -78,6 +78,11 @@ namespace CloudLogic.Services.Trading
                         throw new Exception("Item not owned or already listed");
                     }
 
+                    if (item.Type == ItemType.DuelWeapon)
+                    {
+                        throw new Exception("Daggers can't be listed");
+                    }
+
                     var playerData = await _playerManagerService.GetPlayerDataAsync(ownerId, null, tran);
                     if (playerData.AuctionsCount >= playerData.AuctionLimit)
                     {

@@ -12,6 +12,7 @@ namespace CloudLogic.Services
         Task<List<ItemTemplateModel>> GetItemTemplates();
         Task<List<ItemTemplateModel>> RefreshRedisCache();
         Task<ItemTemplateModel> GetItemTemplateById(string id);
+        Task<ItemTemplateModel> GetDaggerTemplate();
         Task<List<ItemTemplateModel>> GetItemTemplatesForGeneration(RarityType rarity, int levelMin, int levelMax, bool exclusiveRarity);
         Task<ItemTemplateModel> GetItemTemplate(RarityType rarity, int levelMin, int levelMax, bool exclusiveRarity, ItemType type = 0);
         Task<List<ItemTemplateModel>> GetGenerationTemplates(RarityType rarity, int levelMin, int levelMax, bool exclusiveRarity, ItemType type = 0);

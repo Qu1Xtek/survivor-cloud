@@ -36,8 +36,9 @@ namespace CloudLogic.Services.Duel
                 }
             };
 
-            dueler.Stats.DamageMin = Math.Max(GameConstants.DuelMinDamage, weapon?.DamageMin ?? 0);
-            dueler.Stats.DamageMax = Math.Max(dueler.Stats.DamageMin, weapon?.DamageMax ?? 0);
+            var dagger = items.FirstOrDefault(i => i.Type == ItemType.DuelWeapon);
+            dueler.Stats.DamageMin = Math.Max(GameConstants.DuelMinDamage, dagger?.DamageMin ?? 0);
+            dueler.Stats.DamageMax = Math.Max(dueler.Stats.DamageMin, dagger?.DamageMax ?? 0);
             float critPower = 0;
 
             foreach (var stat in items.Where(i => i.Stats != null).SelectMany(i => i.Stats))

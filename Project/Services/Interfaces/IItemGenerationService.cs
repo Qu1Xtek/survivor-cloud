@@ -8,7 +8,7 @@ namespace CloudLogic.Services.Items
 {
     public interface IItemGenerationService
     {
-        Task<Item> CreateItemFromTemplate(string templateId, RarityType rarity);
+        Task<Item> CreateItemFromTemplate(string templateId, RarityType rarity, int level = 0);
         Item CreateItemFromSpecificTemplates(List<ItemTemplateModel> itemTemplates, RarityType rarity);
         Task<Item> CreateItemForLevel(int levelMin, int levelMax, RarityType rarity, ItemType type = 0);
         Item CreateRerollRuneItem();

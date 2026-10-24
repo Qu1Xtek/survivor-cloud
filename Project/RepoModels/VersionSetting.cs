@@ -39,6 +39,12 @@ namespace CloudLogic.RepoModels
         public int DefaultStashSize { get; set; }
 
         [FirestoreProperty]
+        public int DaggerMinVersion { get; set; }
+
+        [FirestoreProperty]
+        public int DaggerDropChance { get; set; }
+
+        [FirestoreProperty]
         public bool IsSkinsFeatureActiveiOS { get; set; }
 
         [FirestoreProperty]

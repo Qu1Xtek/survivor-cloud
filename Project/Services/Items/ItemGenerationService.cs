@@ -19,9 +19,14 @@ namespace CloudLogic.Services.Items
             _logger = logger;
         }
 
-        public async Task<Item> CreateItemFromTemplate(string templateId, RarityType rarity)
+        public async Task<Item> CreateItemFromTemplate(string templateId, RarityType rarity, int level = 0)
         {
             var itemTMPL = await _templateService.GetItemTemplateById(templateId);
+
+            if (itemTMPL.Type == ItemType.DuelWeapon)
+            {
+                itemTMPL = DuelDagger.At(itemTMPL, level, rarity);
+            }
 
             return ItemStatGenerator.GenerateStats(itemTMPL, rarity);
         }

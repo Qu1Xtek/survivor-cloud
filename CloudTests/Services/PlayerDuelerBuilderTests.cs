@@ -16,19 +16,22 @@ namespace CloudTests.Services
             {
                 new Item { Type = ItemType.Weapon, WeaponName = "Bow", DamageMin = 40, DamageMax = 60, AttackSpeed = 1.2, Stats = new List<ItemStat> { new ItemStat { Name = "CriticalChance", Value = 10 } } },
                 new Item { Type = ItemType.Chest, Armor = 50, Stats = new List<ItemStat> { new ItemStat { Name = "Health", Value = 200 }, new ItemStat { Name = "Dodge", Value = 5 } } },
-                new Item { Type = ItemType.Ring, LegendaryStat = new Dictionary<string, int> { { "Exposed", 1 } }, Stats = new List<ItemStat> { new ItemStat { Name = "PhysicalDamage", Value = 15 } } }
+                new Item { Type = ItemType.Ring, LegendaryStat = new Dictionary<string, int> { { "Exposed", 1 } }, Stats = new List<ItemStat> { new ItemStat { Name = "PhysicalDamage", Value = 15 } } },
+                new Item { Type = ItemType.DuelWeapon, WeaponName = "Dagger", DamageMin = 70, DamageMax = 90, AttackSpeed = 3, Stats = new List<ItemStat> { new ItemStat { Name = "Health", Value = 50 } } }
             };
 
             var dueler = PlayerDuelerBuilder.Build("Me", new PlayerData { Id = "p1", HeroLevel = 5, DuelSpells = new List<int> { 2, 14, 9, 99 } }, items);
 
             dueler.MainWeapon.Should().Be("Bow");
             dueler.IsNpc.Should().BeFalse();
-            dueler.Stats.Health.Should().Be(300);
+            dueler.Stats.Health.Should().Be(350);
             dueler.Stats.Armor.Should().Be(50);
             dueler.Stats.Dodge.Should().Be(5);
             dueler.Stats.CritChance.Should().Be(11);
             dueler.Stats.AddPhysDmg.Should().Be(15);
-            dueler.Stats.DamageMin.Should().Be(40);
+            dueler.Stats.DamageMin.Should().Be(70);
+            dueler.Stats.DamageMax.Should().Be(90);
+            dueler.Stats.AttackSpeed.Should().Be(1.2);
             dueler.Keystones.Should().Contain("Exposed");
             dueler.Spells.Should().Equal(2, 14);
         }
@@ -41,6 +44,19 @@ namespace CloudTests.Services
             dueler.MainWeapon.Should().Be("Sword");
             dueler.Stats.Health.Should().Be(100);
             dueler.Stats.DamageMin.Should().Be(15);
+        }
+
+        [TestMethod]
+        public void Build_WithoutDagger_IgnoresMainWeaponDamage()
+        {
+            var items = new List<Item> { new Item { Type = ItemType.Weapon, WeaponName = "Staff", DamageMin = 400, DamageMax = 600, AttackSpeed = 1.5 } };
+
+            var dueler = PlayerDuelerBuilder.Build("Me", new PlayerData { Id = "p1", HeroLevel = 10 }, items);
+
+            dueler.MainWeapon.Should().Be("Staff");
+            dueler.Stats.DamageMin.Should().Be(15);
+            dueler.Stats.DamageMax.Should().Be(15);
+            dueler.Stats.AttackSpeed.Should().Be(1.5);
         }
     }
 }

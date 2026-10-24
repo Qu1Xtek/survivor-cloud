@@ -38,6 +38,7 @@ namespace CloudLogic.Services.Items
             { ItemType.Chest.ToString() },
             { ItemType.Legs.ToString() },
             { ItemType.Weapon.ToString() },
+            { ItemType.DuelWeapon.ToString() },
         };
 
         private Dictionary<ItemType, RepoModels.Items.Item> GetEquipment()

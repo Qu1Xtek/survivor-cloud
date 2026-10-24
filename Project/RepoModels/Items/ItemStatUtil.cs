@@ -111,9 +111,16 @@ namespace CloudLogic.RepoModels.Items
                     { StatEnum.AditionalDamage.ToString() },
                 };
 
+        public static readonly List<string> PossibleDuelWeaponStats = new List<string>
+                {
+                    { StatEnum.Health.ToString() },
+                    { StatEnum.CriticalChance.ToString() },
+                };
+
         public static readonly Dictionary<ItemType, List<string>> PossibleStatsPerType = new Dictionary<ItemType, List<string>>()
         {
             {ItemType.Weapon, PossibleWeaponStats},
+            {ItemType.DuelWeapon, PossibleDuelWeaponStats},
             {ItemType.Head, PossibleHeadStats},
             {ItemType.Chest, PossibleChestStats},
             {ItemType.Legs, PossibleLegsStats},

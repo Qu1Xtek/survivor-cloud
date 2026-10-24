@@ -33,6 +33,9 @@ namespace CloudLogic.RepoModels.Items
         [FirestoreProperty]
         public DropType DropType { get; set; }
 
+        [FirestoreProperty]
+        public int Level { get; set; }
+
         public string AdditionalInfo { get; set; }
     }
 }

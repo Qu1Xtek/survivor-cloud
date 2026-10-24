@@ -61,7 +61,7 @@ namespace CloudLogic.Services.Items
                 var myItems = await _itemsRepo.GetMyOwnItems(playerId, itemIds);
                 var requiredCount = _rarityLimits[myItems[0].Rarity];
 
-                if (myItems.DistinctBy(x => x.Rarity).Count() > 1 || myItems.Count < requiredCount)
+                if (myItems.Any(x => x.Type == ItemType.DuelWeapon) || myItems.DistinctBy(x => x.Rarity).Count() > 1 || myItems.Count < requiredCount)
                 {
                     return;
                 }
